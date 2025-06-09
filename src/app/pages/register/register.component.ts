@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from './../../services/auth.service';
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,7 @@ export class RegisterComponent {
 
   private AuthService=inject(AuthService);
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private router:Router) {
     this.registerForm = this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
@@ -52,6 +53,7 @@ export class RegisterComponent {
 
     const formValue = this.registerForm.value;
     this.AuthService.signUp(formValue.email,formValue.password).subscribe((res)=>{
+      this.router.navigate(['/login']);
       console.log(res);
 
     })

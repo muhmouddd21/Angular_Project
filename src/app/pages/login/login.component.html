@@ -6,7 +6,7 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <!-- Email Field -->
+
       <div class="form-group">
         <label for="email">Email Address</label>
         <input
@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <!-- Password Field -->
+
       <div class="form-group">
         <label for="password">Password</label>
         <input
@@ -40,12 +40,12 @@
         </div>
       </div>
 
-      <!-- Error Message -->
+
       <div class="error-message global-error" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
 
-      <!-- Submit Button -->
+
       <button
         type="submit"
         class="btn-primary"
@@ -56,16 +56,8 @@
       </button>
     </form>
 
-    <!-- Additional Links -->
-    <div class="login-footer">
-      <button
-        type="button"
-        class="link-button"
-        (click)="navigateToForgotPassword()"
-      >
-        Forgot your password?
-      </button>
 
+    <div class="login-footer">
       <div class="signup-link">
         Don't have an account?
         <button

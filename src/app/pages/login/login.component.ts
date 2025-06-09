@@ -41,20 +41,18 @@ export class LoginComponent {
       this.errorMessage = '';
 
       const { email, password } = this.loginForm.value;
-
-      // this.authService.signIn(email, password).subscribe({
-      //   next: (response) => {
-      //     console.log('Login successful:', response);
-      //     this.isLoading = false;
-      //     // Navigate to dashboard or home page
-      //     this.router.navigate(['/dashboard']);
-      //   },
-      //   error: (error) => {
-      //     console.error('Login error:', error);
-      //     this.isLoading = false;
-      //     this.handleError(error);
-      //   }
-      // });
+      this.authService.signIn(email, password).subscribe({
+        next: (response) => {
+          console.log('Login successful:', response);
+          this.isLoading = false;
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          console.error('Login error:', error);
+          this.isLoading = false;
+          this.handleError(error);
+        }
+      });
     } else {
       this.markFormGroupTouched();
     }
@@ -95,7 +93,4 @@ export class LoginComponent {
     this.router.navigate(['/register']);
   }
 
-  navigateToForgotPassword() {
-    this.router.navigate(['/forgot-password']);
-  }
 }
