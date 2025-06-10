@@ -30,6 +30,21 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: 'questions', component: QuestionsComponent },
+  {
+    path: 'questions',
+    loadComponent: () =>
+      import('./pages/questions/questions.component').then(
+        (c) => c.QuestionsComponent
+      ),
+    children: [
+      {
+        path: 'grade',
+        loadComponent: () =>
+          import('./pages/grade-page/grade-page.component').then(
+            (c) => c.GradePageComponent
+          ),
+      },
+    ],
+  },
   { path: '**', component: NotFoundComponent },
 ];

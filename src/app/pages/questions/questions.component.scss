@@ -1,57 +1,125 @@
-.container {
+.quiz-container {
   max-width: 800px;
-  margin: auto;
-  padding: 16px;
-  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.level {
+  font-size: 18px;
+  color: #7f8c8d;
+  margin-bottom: 30px;
+  font-weight: normal;
 }
 
 .question-card {
-  background-color: #f4f4f4;
-  border-radius: 12px;
-  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  background: #fff;
 }
 
-.correct {
-  background-color: #d4edda; /* green */
+.question-card.correct {
+  border-left: 4px solid #2ecc71;
 }
 
-.incorrect {
-  background-color: #f8d7da; /* red */
+.question-card.incorrect {
+  border-left: 4px solid #e74c3c;
+}
+
+.question-content {
+  padding: 20px;
 }
 
 .question-text {
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 16px;
 }
 
 .options-list {
   list-style: none;
-  padding-left: 0;
-  margin-bottom: 10px;
+  padding: 0;
+  margin-bottom: 20px;
 }
 
 .options-list li {
-  padding: 4px 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.options-list li:last-child {
+  border-bottom: none;
+}
+
+.options-list label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.options-list input[type="radio"] {
+  margin-right: 10px;
 }
 
 .check-btn {
-  padding: 6px 12px;
-  background-color: #1976d2;
+  background-color: #3498db;
   color: white;
   border: none;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 4px;
   cursor: pointer;
-  margin-top: 6px;
+  font-size: 14px;
+  transition: background-color 0.3s;
 }
 
 .check-btn:hover {
-  background-color: #145ea8;
+  background-color: #2980b9;
 }
 
-.answer-text {
-  margin-top: 10px;
-  font-weight: 500;
+.check-btn:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.feedback {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.correct-feedback {
+  background-color: #e8f8f0;
+  color: #27ae60;
+}
+
+.incorrect-feedback {
+  background-color: #fdedec;
+  color: #c0392b;
+}
+.grade-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 24px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.grade-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.grade-btn:hover:not(:disabled) {
+  background-color: #0056b3;
 }
