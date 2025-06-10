@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { Router, RouterOutlet, RouterModule } from '@angular/router';
-
+import { RouterOutlet, RouterModule } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar.component';
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet,RouterModule],
+  imports: [RouterOutlet, RouterModule, NavbarComponent],
   templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.scss'
+  styleUrl: './main-layout.component.scss',
 })
-export class MainLayoutComponent {
-
-}
+export class MainLayoutComponent {}

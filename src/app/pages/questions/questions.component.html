@@ -1,0 +1,40 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <h1>Topic: {{ questions.topic }}</h1>
+  <h2>Level: {{ questions.level }}</h2>
+
+  <div
+    *ngFor="let ques of questions.questions; let i = index"
+    [ngClass]="{
+      'question-card': true,
+      correct: answerStatus[i] === 'correct',
+      incorrect: answerStatus[i] === 'incorrect'
+    }"
+  >
+    <p class="question-text">{{ i + 1 }}. {{ ques.question }}</p>
+
+    <ul class="options-list">
+      <li *ngFor="let opt of ques.options">
+        <label>
+          <input
+            type="radio"
+            name="question-{{ i }}"
+            [value]="opt"
+            [(ngModel)]="userAnswers[i]"
+          />
+          {{ opt }}
+        </label>
+      </li>
+    </ul>
+
+    <button (click)="checkAnswer(i, ques.correctAnswer)" class="check-btn">
+      Check Answer
+    </button>
+
+    <p *ngIf="answerStatus[i] === 'correct'" class="answer-text">✅ Correct!</p>
+    <p *ngIf="answerStatus[i] === 'incorrect'" class="answer-text">
+      ❌ Incorrect! Correct Answer: {{ ques.correctAnswer }}
+    </p>
+  </div>
+</div>
