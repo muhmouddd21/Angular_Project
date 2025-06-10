@@ -1,40 +1,61 @@
 <app-navbar></app-navbar>
-
-<div class="container">
-  <h1>Topic: {{ questions.topic }}</h1>
-  <h2>Level: {{ questions.level }}</h2>
+<div class="quiz-container">
+  <h1>Topic: {{ questionsForm.topic }}</h1>
+  <h2 class="level">Level: {{ questionsForm.level }}</h2>
 
   <div
-    *ngFor="let ques of questions.questions; let i = index"
-    [ngClass]="{
-      'question-card': true,
-      correct: answerStatus[i] === 'correct',
-      incorrect: answerStatus[i] === 'incorrect'
-    }"
+    *ngFor="let question of questionsForm.questions; let i = index"
+    class="question-card"
+    [class.correct]="answerStatus[i] === 'correct'"
+    [class.incorrect]="answerStatus[i] === 'incorrect'"
   >
-    <p class="question-text">{{ i + 1 }}. {{ ques.question }}</p>
+    <div class="question-content">
+      <p class="question-text">{{ i + 1 }}. {{ question.question }}</p>
 
-    <ul class="options-list">
-      <li *ngFor="let opt of ques.options">
-        <label>
-          <input
-            type="radio"
-            name="question-{{ i }}"
-            [value]="opt"
-            [(ngModel)]="userAnswers[i]"
-          />
-          {{ opt }}
-        </label>
-      </li>
-    </ul>
+      <ul class="options-list">
+        <li *ngFor="let opt of question.options">
+          <label>
+            <input
+              type="radio"
+              [value]="opt"
+              [(ngModel)]="selectedOption"
+              [disabled]="answerStatus[i] !== null"
+            />
+            {{ opt }}
+          </label>
+        </li>
+      </ul>
 
-    <button (click)="checkAnswer(i, ques.correctAnswer)" class="check-btn">
-      Check Answer
+      <button
+        class="check-btn"
+        (click)="checkAnswer(i, question, question.correctAnswer)"
+        [disabled]="answerStatus[i] !== null"
+      >
+        Check Answer
+      </button>
+
+      <div
+        *ngIf="answerStatus[i] === 'correct'"
+        class="feedback correct-feedback"
+      >
+        ✓ Correct!
+      </div>
+      <div
+        *ngIf="answerStatus[i] === 'incorrect'"
+        class="feedback incorrect-feedback"
+      >
+        ✗ Incorrect! Correct Answer:
+        <strong>{{ question.correctAnswer }}</strong>
+      </div>
+    </div>
+  </div>
+  <div class="text-center mt-4">
+    <button
+      class="grade-btn"
+      (click)="navigateToGrade()"
+      [disabled]="!isQuizCompleted()"
+    >
+      Get Grade
     </button>
-
-    <p *ngIf="answerStatus[i] === 'correct'" class="answer-text">✅ Correct!</p>
-    <p *ngIf="answerStatus[i] === 'incorrect'" class="answer-text">
-      ❌ Incorrect! Correct Answer: {{ ques.correctAnswer }}
-    </p>
   </div>
 </div>

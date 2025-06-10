@@ -3,6 +3,8 @@ import { QuizResponse } from '../../interfaces/quiz-response';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { QuizQuestion } from '../../interfaces/quiz-question';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-questions',
   standalone: true,
@@ -11,10 +13,12 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './questions.component.scss',
 })
 export class QuestionsComponent {
-  userAnswers: string[] = [];
-  answerStatus: ('correct' | 'incorrect' | null)[] = [];
-
-  questions: QuizResponse = {
+  answerStatus: (string | null)[] = [];
+  selectedOption!: string;
+  wrongAnswer: QuizQuestion[] = [];
+  grade: number = 0;
+  constructor(private router: Router) {}
+  questionsForm: QuizResponse = {
     topic: 'JavaScript',
     level: 'beginner',
     questions: [
@@ -56,17 +60,23 @@ export class QuestionsComponent {
     ],
   };
   ngOnInit() {
-    const total = this.questions.questions.length;
-    this.userAnswers = new Array(total).fill('');
-    this.answerStatus = new Array(total).fill(null);
+    const numOfQuestions = this.questionsForm.questions.length;
+    this.answerStatus = new Array(numOfQuestions).fill(null);
   }
 
-  checkAnswer(index: number, correctAnswer: string) {
-    const selected = this.userAnswers[index];
-    if (selected === correctAnswer) {
-      this.answerStatus[index] = 'correct';
-    } else {
+  checkAnswer(index: number, question: QuizQuestion, corrAnswer: string) {
+    if (this.selectedOption !== corrAnswer) {
+      this.wrongAnswer.push(question);
       this.answerStatus[index] = 'incorrect';
+    } else {
+      this.answerStatus[index] = 'correct';
+      this.grade++;
     }
+  }
+  navigateToGrade(): void {
+    this.router.navigateByUrl('/questions/grade');
+  }
+  isQuizCompleted(): boolean {
+    return this.answerStatus.every((status) => status !== null);
   }
 }

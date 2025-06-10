@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { OpenrouterService } from '../../services/ai-api.service';
 import { CommonModule } from '@angular/common';
 import { QuizResponse } from '../../interfaces/quiz-response';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,10 @@ export class HomeComponent {
   isLoading = false;
   questions!: QuizResponse;
 
-  constructor(private openrouterService: OpenrouterService) {}
+  constructor(
+    private openrouterService: OpenrouterService,
+    private router: Router
+  ) {}
 
   sendMessage() {
     this.isLoading = true;
@@ -48,9 +52,6 @@ export class HomeComponent {
 
     this.openrouterService.sendMessage(userMessage).subscribe({
       next: (res) => {
-        console.log('Hello world');
-
-        console.log(res);
         this.response = res.choices?.[0]?.message?.content || 'No response';
         console.log(this.response);
         this.isLoading = false;
@@ -59,6 +60,9 @@ export class HomeComponent {
         console.error('API error:', err);
         this.response = 'Error fetching response';
         this.isLoading = false;
+      },
+      complete: () => {
+        this.router.navigateByUrl('/questions');
       },
     });
   }
