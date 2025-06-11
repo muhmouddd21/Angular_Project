@@ -50,6 +50,10 @@ export class LoginComponent {
         next: (response) => {
           console.log('Login successful:', response);
           this.isLoading = false;
+          this.authService.login();
+          this.authService.idtoken=response.idToken;
+          this.authService.email=response.email;
+
           this.router.navigate(['/home']);
         },
         error: (error) => {

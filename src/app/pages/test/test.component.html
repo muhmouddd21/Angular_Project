@@ -1,0 +1,14 @@
+<p>test works!</p>
+<button (click)="test()">test</button>
+
+@if(showErrorAlert){
+  <div class="alert alert-danger d-flex align-items-center" role="alert">
+  <svg class="bi flex-shrink-0 me-2" width="20" height="20" fill="currentColor" role="img" aria-label="Warning:">
+    <use xlink:href="#exclamation-triangle-fill"/>
+  </svg>
+  <div>
+    ⚠️ You are not authorized to access this resource.
+  </div>
+</div>
+}
+

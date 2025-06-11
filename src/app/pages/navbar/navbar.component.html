@@ -28,29 +28,47 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="#">Generate quiz</a>
+          <a class="nav-link text-dark" >Generate quiz</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="#">How it works</a>
+          <a class="nav-link text-dark" >How it works</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="#">FAQ</a>
+          <a class="nav-link text-dark" >FAQ</a>
+        </li>
+                <li class="nav-item">
+          <a class="nav-link text-dark" [routerLink]="['/test']">test</a>
         </li>
       </ul>
-      <div class="buttons d-flex gap-2">
-        <button
-          [routerLink]="['/login']"
-          class="btn btn-outline-primary px-4 py-2"
-        >
-          Login
-        </button>
-        <button
-          [routerLink]="['/register']"
-          class="btn btn-primary px-4 py-2 text-white"
-        >
-          Register
-        </button>
-      </div>
+      @if(!islogged){
+            <div class="buttons d-flex gap-2">
+            <button
+              [routerLink]="['/login']"
+              class="btn btn-outline-primary px-4 py-2"
+            >
+              Login
+            </button>
+            <button
+              [routerLink]="['/register']"
+              class="btn btn-primary px-4 py-2 text-white"
+            >
+              Register
+            </button>
+          </div>
+      }@else{
+        <div class="buttons d-flex gap-2">
+              <div class="user-icon text-center me-3 my-auto"></div>
+             <button
+              (click)="logOut()"
+              class="btn btn-outline-primary px-4 py-2"
+            >
+              Logout
+            </button>
+        </div>
+
+      }
+
+
     </div>
   </div>
 </nav>

@@ -1,3 +1,32 @@
-.logo-title {
-  font-size: 1.5rem;
+.user-icon {
+  width: 24px;
+  height: 24px;
+  background: #bbb;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+
+.user-icon::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #888;
+  border-radius: 50%;
+}
+
+.user-icon::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 6px;
+  background: #888;
+  border-radius: 6px / 3px;
 }
