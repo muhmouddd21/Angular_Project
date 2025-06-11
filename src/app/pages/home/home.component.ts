@@ -1,12 +1,11 @@
-// src/app/home/home.component.ts
 import { Component } from '@angular/core';
 import { FAQComponent } from '../components/faq/faq.component';
 import { FormsModule } from '@angular/forms';
-import { OpenrouterService } from '../../services/ai-api.service';
+import { GeminiService } from '../../services/ai-api.service';
 import { CommonModule } from '@angular/common';
 import { QuizResponse } from '../../interfaces/quiz-response';
 import { Router } from '@angular/router';
-
+import { QuizStateService } from '../../services/quiz-state.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -20,10 +19,11 @@ export class HomeComponent {
   response: string = '';
   isLoading = false;
   questions!: QuizResponse;
-
+  numberOfQuestions: number = 5;
   constructor(
-    private openrouterService: OpenrouterService,
-    private router: Router
+    private GeminiService: GeminiService,
+    private router: Router,
+    private quizState: QuizStateService
   ) {}
 
   sendMessage() {
@@ -36,7 +36,7 @@ export class HomeComponent {
     - Only accept difficulty levels: beginner, intermediate, or advanced.  
 
     2. **Format**:
-    Return a well-structured object matching this TypeScript interface:  
+    Return a well-structured json matching this TypeScript interface:  
     interface Quiz {
       topic: string;
       level: string;
@@ -48,12 +48,16 @@ export class HomeComponent {
       options: string[];   // Exactly 4 distinct choices
       correctAnswer: string; // Must match one option exactly
     } 
-    return only 5 questions for now just for testing`;
+    return only ${this.numberOfQuestions} questions and only
+    return json only that can be parsed if there is no input 
+    for the title generate a random quiz with a title descriping the random topic`;
 
-    this.openrouterService.sendMessage(userMessage).subscribe({
+    this.GeminiService.getChatCompletion(userMessage).subscribe({
       next: (res) => {
-        this.response = res.choices?.[0]?.message?.content || 'No response';
-        console.log(this.response);
+        let resText = res.candidates[0].content.parts[0].text;
+        let cleanedJson = resText.replace(/```json|```/g, '').trim();
+        const quizData: QuizResponse = JSON.parse(cleanedJson);
+        this.quizState.setQuiz(quizData);
         this.isLoading = false;
       },
       error: (err) => {

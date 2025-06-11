@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './pages/main-layout/main-layout.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { QuestionsComponent } from './pages/questions/questions.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +15,13 @@ export const routes: Routes = [
           }),
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
+      {
+        path: 'questions',
+        loadComponent: () =>
+          import('./pages/questions/questions.component').then((c) => {
+            return c.QuestionsComponent;
+          }),
+      },
       {
         path: 'login',
         loadComponent: () =>
@@ -33,22 +39,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/test/test.component').then(
             (c) => c.TestComponent
-          ),
-      },
-    ],
-  },
-  {
-    path: 'questions',
-    loadComponent: () =>
-      import('./pages/questions/questions.component').then(
-        (c) => c.QuestionsComponent
-      ),
-    children: [
-      {
-        path: 'grade',
-        loadComponent: () =>
-          import('./pages/grade-page/grade-page.component').then(
-            (c) => c.GradePageComponent
           ),
       },
     ],

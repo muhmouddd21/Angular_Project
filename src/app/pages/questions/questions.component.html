@@ -1,4 +1,3 @@
-<app-navbar></app-navbar>
 <div class="quiz-container">
   <h1>Topic: {{ questionsForm.topic }}</h1>
   <h2 class="level">Level: {{ questionsForm.level }}</h2>
@@ -49,13 +48,14 @@
       </div>
     </div>
   </div>
-  <div class="text-center mt-4">
-    <button
-      class="grade-btn"
-      (click)="navigateToGrade()"
-      [disabled]="!isQuizCompleted()"
-    >
-      Get Grade
-    </button>
+  <div class="quiz-footer">
+    <p class="grade">
+      Your Grade: {{ grade }} / {{ questionsForm.questions.length }}
+    </p>
+
+    <div class="action-buttons">
+      <button class="check-btn" (click)="saveQuiz()">Save Quiz</button>
+      <button class="check-btn" (click)="goHome()">Back to Home</button>
+    </div>
   </div>
 </div>
