@@ -45,6 +45,21 @@
             <option value="hard">Hard</option>
           </select>
         </div>
+        <div class="mb-4">
+          <label for="numberOfQuestions" class="form-label fw-semibold">
+            Number of Questions
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            id="numberOfQuestions"
+            name="numberOfQuestions"
+            required
+            [(ngModel)]="numberOfQuestions"
+            min="1"
+            max="30"
+          />
+        </div>
 
         <button type="submit" class="btn btn-primary" [disabled]="isLoading">
           <ng-container *ngIf="!isLoading">
