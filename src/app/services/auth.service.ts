@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { FirebaseService } from './firebase.service';
 import { Injectable } from '@angular/core';
 import { signIn, signUp } from '../firebaseUrl';
@@ -7,6 +7,23 @@ import { signIn, signUp } from '../firebaseUrl';
   providedIn: 'root'
 })
 export class AuthService {
+  idtoken:string=``;
+  email:string=``;
+  private _isLoggedIn = new BehaviorSubject<boolean>(false);
+
+  isLoggedIn$ = this._isLoggedIn.asObservable();
+
+  login() {
+    this._isLoggedIn.next(true);
+  }
+
+  logout() {
+    this._isLoggedIn.next(false);
+  }
+  get isLoggedIn(): boolean {
+    return this._isLoggedIn.value;
+  }
+
 
   constructor(private  firebaseService: FirebaseService) { }
 

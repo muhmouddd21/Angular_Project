@@ -28,6 +28,13 @@ export const routes: Routes = [
             (c) => c.RegisterComponent
           ),
       },
+      {
+        path: 'test',
+        loadComponent: () =>
+          import('./pages/test/test.component').then(
+            (c) => c.TestComponent
+          ),
+      },
     ],
   },
   { path: 'questions', component: QuestionsComponent },
