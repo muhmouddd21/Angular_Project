@@ -6,10 +6,18 @@ import { CommonModule } from '@angular/common';
 import { QuizResponse } from '../../interfaces/quiz-response';
 import { Router } from '@angular/router';
 import { QuizStateService } from '../../services/quiz-state.service';
+import { HowToMakeQuizComponent } from '../components/how-to-make-quiz/how-to-make-quiz.component';
+import { QuizInfoComponent } from '../components/quiz-info/quiz-info.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FAQComponent, FormsModule, CommonModule],
+  imports: [
+    FAQComponent,
+    FormsModule,
+    CommonModule,
+    HowToMakeQuizComponent,
+    QuizInfoComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

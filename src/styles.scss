@@ -1,6 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap");
 
+:root {
+  --primary-color: #4361ee;
+  --primary-hover: #3a56d4;
+  --text-color: #2b2d42;
+  --light-bg: #f8f9fa;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background-color: var(--light-bg);
+  color: var(--text-color);
+}
+
 .logo-title {
   font-family: "Poppins", sans-serif;
   font-weight: 700;
@@ -48,4 +61,21 @@
   transform: translateY(-2px);
   background-color: white;
   color: #3a86ff;
+}
+
+.feature-img {
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.section-title {
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: #495057;
 }
