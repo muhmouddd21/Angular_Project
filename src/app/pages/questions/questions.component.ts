@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuizStateService } from '../../services/quiz-state.service';
+import { SendDataService } from '../../services/send-data.service';
+import { AuthService } from '../../services/auth.service';
+import { fireStoreRestApi } from '../../firebaseUrl';
 @Component({
   selector: 'app-questions',
   standalone: true,
@@ -13,13 +16,19 @@ import { QuizStateService } from '../../services/quiz-state.service';
   styleUrl: './questions.component.scss',
 })
 export class QuestionsComponent {
+  showErrorAlert = false;
   answerStatus: (string | null)[] = [];
   selectedOption!: string;
   questionsForm!: QuizResponse;
   wrongAnswer: QuizQuestion[] = [];
   grade: number = 0;
 
-  constructor(private router: Router, private quizState: QuizStateService) {}
+  constructor(
+    private router: Router,
+    private quizState: QuizStateService,
+    private sendData: SendDataService,
+    private authServive: AuthService
+  ) {}
   ngOnInit() {
     this.questionsForm = this.quizState.getQuiz();
     const numOfQuestions = this.questionsForm.questions.length;
@@ -42,13 +51,58 @@ export class QuestionsComponent {
     return this.answerStatus.every((status) => status !== null);
   }
 
-  saveQuiz(): void {
-    alert('Your quiz has been saved!');
-    //add fire base logic here
-  }
-
   goHome(): void {
     this.quizState.clearQuiz();
     this.router.navigateByUrl('/');
+  }
+
+  saveQuiz() {
+    const firestoreFormatted = {
+      fields: {
+        topic: { stringValue: this.questionsForm.topic },
+        level: { stringValue: this.questionsForm.level },
+        questions: {
+          arrayValue: {
+            values: this.questionsForm.questions.map((q) => ({
+              mapValue: {
+                fields: {
+                  id: { stringValue: q.id },
+                  question: { stringValue: q.question },
+                  options: {
+                    arrayValue: {
+                      values: q.options.map((opt) => ({ stringValue: opt })),
+                    },
+                  },
+                  correctAnswer: { stringValue: q.correctAnswer },
+                },
+              },
+            })),
+          },
+        },
+      },
+    };
+
+    this.sendData
+      .postRequest(fireStoreRestApi, firestoreFormatted, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authServive.idtoken}`,
+        },
+      })
+      .subscribe({
+        next: (response) => {
+          console.log('send correctly:', response);
+        },
+        error: (error) => {
+          this.showAlert();
+          this.router.navigate(['login']);
+          console.error('there is an error:', error);
+        },
+      });
+    this.quizState.clearQuiz();
+  }
+
+  showAlert() {
+    this.showErrorAlert = true;
   }
 }
