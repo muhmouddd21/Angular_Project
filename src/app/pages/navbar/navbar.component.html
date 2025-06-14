@@ -28,16 +28,12 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark">Generate quiz</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark">How it works</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark">FAQ</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" [routerLink]="['/test']">test</a>
+          <a
+            class="nav-link active text-dark"
+            aria-current="page"
+            [routerLink]="['/aboutus']"
+            >About us</a
+          >
         </li>
       </ul>
       @if(!islogged){

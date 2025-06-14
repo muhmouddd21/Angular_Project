@@ -13,7 +13,8 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/home/home.component').then((c) => {
             return c.HomeComponent;
-          }),canActivate:[authGuardGuard]
+          }),
+        canActivate: [authGuardGuard],
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       {
@@ -21,7 +22,8 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/questions/questions.component').then((c) => {
             return c.QuestionsComponent;
-          }),canActivate:[authGuardGuard]
+          }),
+        canActivate: [authGuardGuard],
       },
       {
         path: 'login',
@@ -33,13 +35,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/register/register.component').then(
             (c) => c.RegisterComponent
-          )
+          ),
       },
       {
-        path: 'test',
+        path: 'aboutus',
         loadComponent: () =>
-          import('./pages/test/test.component').then(
-            (c) => c.TestComponent
+          import('./pages/about-us/about-us.component').then(
+            (c) => c.AboutUsComponent
           ),
       },
     ],

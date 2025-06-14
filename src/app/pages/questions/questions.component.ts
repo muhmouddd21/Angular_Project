@@ -96,9 +96,13 @@ export class QuestionsComponent {
         error: (error) => {
           this.showAlert();
           this.router.navigate(['login']);
-          console.error('there is an error:', error);
+        },
+        complete: () => {
+          alert('Quiz saved successfully');
+          this.router.navigateByUrl('/');
         },
       });
+
     this.quizState.clearQuiz();
   }
 
