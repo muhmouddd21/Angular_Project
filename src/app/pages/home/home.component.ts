@@ -67,7 +67,6 @@ export class HomeComponent {
         const quizData: QuizResponse = JSON.parse(cleanedJson);
         this.quizState.setQuiz(quizData);
         this.isLoading = false;
-        console.log(quizData);
       },
       error: (err) => {
         console.error('API error:', err);

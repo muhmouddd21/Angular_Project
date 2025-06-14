@@ -25,8 +25,15 @@
             required
             [(ngModel)]="quizTopic"
             name="quizTopic"
+            #quizTopicField="ngModel"
           />
           <div class="form-text">Be specific for better results</div>
+          <div
+            class="text-danger"
+            *ngIf="quizTopicField.invalid && quizTopicField.touched"
+          >
+            Quiz topic is required.
+          </div>
         </div>
 
         <div class="mb-4">
@@ -39,12 +46,20 @@
             required
             [(ngModel)]="quizLevel"
             name="quizLevel"
+            #quizLevelField="ngModel"
           >
             <option value="easy" selected>Easy</option>
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
           </select>
+          <div
+            class="text-danger"
+            *ngIf="quizLevelField.invalid && quizLevelField.touched"
+          >
+            Difficulty level is required.
+          </div>
         </div>
+
         <div class="mb-4">
           <label for="numberOfQuestions" class="form-label fw-semibold">
             Number of Questions
@@ -58,10 +73,23 @@
             [(ngModel)]="numberOfQuestions"
             min="1"
             max="30"
+            #numberOfQuestionsField="ngModel"
           />
+          <div
+            class="text-danger"
+            *ngIf="
+              numberOfQuestionsField.invalid && numberOfQuestionsField.touched
+            "
+          >
+            Please enter a number between 1 and 30.
+          </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isLoading || quizForm.invalid"
+        >
           <ng-container *ngIf="!isLoading">
             <span class="generate-icon">✨</span> Generate Quiz
           </ng-container>
