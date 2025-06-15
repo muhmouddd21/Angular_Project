@@ -18,6 +18,7 @@ import { fireStoreRestApi } from '../../firebaseUrl';
 export class QuestionsComponent {
   showErrorAlert = false;
   answerStatus: (string | null)[] = [];
+  userAnswer: (string | null)[] = [];
   selectedOption!: string;
   questionsForm!: QuizResponse;
   wrongAnswer: QuizQuestion[] = [];
@@ -57,6 +58,12 @@ export class QuestionsComponent {
   }
 
   saveQuiz() {
+    if (this.isQuizCompleted()) {
+      alert('Please Answer all questions');
+      return;
+    }
+    console.log(this.isQuizCompleted());
+
     const firestoreFormatted = {
       fields: {
         topic: { stringValue: this.questionsForm.topic },
