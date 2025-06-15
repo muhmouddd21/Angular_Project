@@ -9,6 +9,7 @@ import { signIn, signUp } from '../firebaseUrl';
 export class AuthService {
   idtoken:string=``;
   email:string=``;
+  Uid:string=``;
   private _isLoggedIn = new BehaviorSubject<boolean>(false);
 
   isLoggedIn$ = this._isLoggedIn.asObservable();

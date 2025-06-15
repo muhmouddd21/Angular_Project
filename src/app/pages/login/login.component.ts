@@ -49,11 +49,14 @@ export class LoginComponent {
       this.authService.signIn(email, password).subscribe({
         next: (response) => {
           console.log('Login successful:', response);
+
+          console.log(response.localId);
+
           this.isLoading = false;
           this.authService.login();
           this.authService.idtoken=response.idToken;
           this.authService.email=response.email;
-
+          this.authService.Uid =response.localId;
           this.router.navigate(['/home']);
         },
         error: (error) => {
