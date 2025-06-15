@@ -90,7 +90,7 @@ export class QuestionsComponent {
     };
 
     this.sendData
-      .postRequest(fireStoreRestApi, firestoreFormatted, {
+      .patchRequest(fireStoreRestApi.concat(`${this.authServive.Uid}`), firestoreFormatted, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authServive.idtoken}`,

@@ -5,12 +5,12 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class SendDataService {
+export class GetDataService {
 
   http = inject(HttpClient);
   constructor() { }
 
-    patchRequest(url: string, body: any, options: any): Observable<ArrayBuffer> {
-      return this.http.patch(url, body, options);
+    getRequest(url: string, options: any): Observable<ArrayBuffer> {
+      return this.http.get(url, options);
     }
 }

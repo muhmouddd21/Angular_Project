@@ -44,6 +44,13 @@ export const routes: Routes = [
             (c) => c.AboutUsComponent
           ),
       },
+           {
+        path: 'test',
+        loadComponent: () =>
+          import('./pages/test/test.component').then(
+            (c) => c.TestComponent
+          ),
+      },
     ],
   },
   { path: '**', component: NotFoundComponent },
