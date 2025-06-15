@@ -18,7 +18,6 @@ import { fireStoreRestApi } from '../../firebaseUrl';
 export class QuestionsComponent {
   showErrorAlert = false;
   answerStatus: (string | null)[] = [];
-  userAnswer: (string | null)[] = [];
   selectedOption!: string;
   questionsForm!: QuizResponse;
   wrongAnswer: QuizQuestion[] = [];
@@ -58,19 +57,37 @@ export class QuestionsComponent {
   }
 
   saveQuiz() {
-    if (this.isQuizCompleted()) {
+    if (!this.isQuizCompleted()) {
       alert('Please Answer all questions');
       return;
     }
-    console.log(this.isQuizCompleted());
 
     const firestoreFormatted = {
       fields: {
         topic: { stringValue: this.questionsForm.topic },
         level: { stringValue: this.questionsForm.level },
+        quizTime: { timestampValue: new Date().toISOString() },
         questions: {
           arrayValue: {
             values: this.questionsForm.questions.map((q) => ({
+              mapValue: {
+                fields: {
+                  id: { stringValue: q.id },
+                  question: { stringValue: q.question },
+                  options: {
+                    arrayValue: {
+                      values: q.options.map((opt) => ({ stringValue: opt })),
+                    },
+                  },
+                  correctAnswer: { stringValue: q.correctAnswer },
+                },
+              },
+            })),
+          },
+        },
+        wrongAnswers: {
+          arrayValue: {
+            values: this.wrongAnswer.map((q) => ({
               mapValue: {
                 fields: {
                   id: { stringValue: q.id },
@@ -90,12 +107,16 @@ export class QuestionsComponent {
     };
 
     this.sendData
-      .patchRequest(fireStoreRestApi.concat(`${this.authServive.Uid}`), firestoreFormatted, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.authServive.idtoken}`,
-        },
-      })
+      .patchRequest(
+        fireStoreRestApi.concat(`${this.authServive.Uid}`),
+        firestoreFormatted,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.authServive.idtoken}`,
+          },
+        }
+      )
       .subscribe({
         next: (response) => {
           console.log('send correctly:', response);
