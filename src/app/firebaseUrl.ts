@@ -8,4 +8,3 @@ export const signIn =`${firebaseRestApi}:signInWithPassword?key=${apikey}`;
 export const projectIdInFirebase ='angular-project-fe202';
 export const userCollection =`users`;
 export const fireStoreRestApi =`https://firestore.googleapis.com/v1/projects/${projectIdInFirebase}/databases/(default)/documents/${userCollection}/`
-export const fireStoreRestApiGet =`https://firestore.googleapis.com/v1/projects/${projectIdInFirebase}/databases/(default)/documents/${userCollection}/`

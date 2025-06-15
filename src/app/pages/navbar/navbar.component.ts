@@ -13,8 +13,8 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 export class NavbarComponent  {
 
   islogged: boolean = false;
-
   constructor(private authService: AuthService,private router:Router) {}
+
 
   ngOnInit() {
     this.authService.isLoggedIn$.subscribe(
@@ -26,5 +26,12 @@ export class NavbarComponent  {
     this.authService.idtoken=``;
     this.router.navigate(['login'])
   }
+  navigate(){
+    const idOfUser:string =this.authService.Uid;
+    console.log(idOfUser);
+    console.log(this.authService.Uid);
 
+
+    this.router.navigate([`/user`,idOfUser])
+  }
 }

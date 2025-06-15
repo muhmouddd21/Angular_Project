@@ -43,14 +43,17 @@ export const routes: Routes = [
           import('./pages/about-us/about-us.component').then(
             (c) => c.AboutUsComponent
           ),
+        canActivate: [authGuardGuard]
       },
-           {
-        path: 'test',
+        {
+        path: 'user/:id',
         loadComponent: () =>
-          import('./pages/test/test.component').then(
-            (c) => c.TestComponent
+          import('./pages/user/user.component').then(
+            (c) => c.UserComponent
           ),
+        canActivate: [authGuardGuard]
       },
+
     ],
   },
   { path: '**', component: NotFoundComponent },

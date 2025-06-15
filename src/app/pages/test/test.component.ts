@@ -1,7 +1,7 @@
 import { AuthService } from './../../services/auth.service';
 import { Component } from '@angular/core';
 import { SendDataService } from '../../services/send-data.service';
-import { fireStoreRestApi, fireStoreRestApiGet } from '../../firebaseUrl';
+import { firebaseRestApi, fireStoreRestApi } from '../../firebaseUrl';
 import { Route, Router } from '@angular/router';
 import { GetDataService } from '../../services/get-data.service';
 
@@ -46,7 +46,7 @@ export class TestComponent {
 
 
 test(){
-  this.getData.getRequest(fireStoreRestApiGet.concat(this.authServive.Uid),
+  this.getData.getRequest(firebaseRestApi.concat(this.authServive.Uid),
     { headers: { 'Content-Type': 'application/json',
       'Authorization': `Bearer ${this.authServive.idtoken}`
      } }

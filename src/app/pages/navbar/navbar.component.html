@@ -36,7 +36,6 @@
           >
         </li>
       </ul>
-      <button [routerLink]="['/test']">test</button>
       @if(!islogged){
       <div class="buttons d-flex gap-2">
         <button
@@ -54,7 +53,7 @@
       </div>
       }@else{
       <div class="buttons d-flex gap-2">
-        <div class="user-icon text-center me-3 my-auto"></div>
+        <div class="user-icon text-center me-3 my-auto" (click)="navigate()"></div>
         <button (click)="logOut()" class="btn btn-outline-primary px-4 py-2">
           Logout
         </button>

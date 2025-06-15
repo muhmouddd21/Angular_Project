@@ -13,4 +13,7 @@ export class SendDataService {
     patchRequest(url: string, body: any, options: any): Observable<ArrayBuffer> {
       return this.http.patch(url, body, options);
     }
+    putRequest(url: string, body: any, options: any): Observable<ArrayBuffer> {
+      return this.http.put(url, body, options);
+    }
 }

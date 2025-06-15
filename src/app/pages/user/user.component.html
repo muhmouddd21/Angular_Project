@@ -1,0 +1,31 @@
+<div class="dashboard-container">
+    <div class="header">
+      <h1>My Quiz Dashboard</h1>
+      <div class="user-info">
+        <div>
+          <p>{{ email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="all-grades">
+      <h2>All Quiz Grades</h2>
+      <div class="grades-table">
+        <div class="table-header">
+          <span>Quiz Topic</span>
+          <span>Level</span>
+          <span>Score</span>
+          <span>Date</span>
+        </div>
+        <div
+          *ngFor="let grade of quizGrades"
+          class="table-row"
+          >
+          <span>{{ grade.topic }}</span>
+          <span>{{ grade.level }}</span>
+          <span>{{ grade.numberOfQuestions - grade.numberOfWrongAnswers }}</span>
+          <span>{{ grade.quizTime }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
