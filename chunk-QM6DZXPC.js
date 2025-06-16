@@ -1,0 +1,1 @@
+import{P as a}from"./chunk-RI2LG5KK.js";var o=(()=>{class t{setQuiz(i){this.quizData=i}getQuiz(){return this.quizData}clearQuiz(){this.quizData={}}static{this.\u0275fac=function(e){return new(e||t)}}static{this.\u0275prov=a({token:t,factory:t.\u0275fac,providedIn:"root"})}}return t})();export{o as a};
