@@ -2,12 +2,11 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8fafc;
   min-height: 100vh;
 }
 
-/* Header Styles */
 .header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -44,7 +43,6 @@
   opacity: 0.95;
 }
 
-/* All Grades Section */
 .all-grades {
   background: white;
   border-radius: 12px;
@@ -63,7 +61,7 @@
 }
 
 .all-grades h2::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -73,7 +71,6 @@
   border-radius: 2px;
 }
 
-/* Table Styles */
 .grades-table {
   width: 100%;
   border-radius: 8px;
@@ -83,7 +80,7 @@
 
 .table-header {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr;
   gap: 20px;
   background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
   color: white;
@@ -96,7 +93,7 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr;
   gap: 20px;
   padding: 20px 25px;
   border-bottom: 1px solid #e2e8f0;
@@ -136,4 +133,34 @@
   font-weight: 700;
   color: #48bb78;
   font-size: 1.1rem;
+}
+
+.requiz-btn,
+.delete-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 6px;
+}
+
+.requiz-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.requiz-btn:hover {
+  background-color: #0056b3;
+}
+
+.delete-btn {
+  background-color: #e53e3e;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c53030;
 }
