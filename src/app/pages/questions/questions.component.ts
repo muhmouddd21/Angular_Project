@@ -68,143 +68,34 @@ export class QuestionsComponent {
       return;
     }
 
-this.getData.getRequest(fireStoreRestApi.concat(`${this.authServive.Uid}`), {
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${this.authServive.idtoken}`,
-  },
-}).subscribe({
-  next: (response) => {
-    try {
-      // Parse the ArrayBuffer response to JSON
-      let parsedResponse;
-      if (response instanceof ArrayBuffer) {
-        const textDecoder = new TextDecoder();
-        const responseText = textDecoder.decode(response);
-        parsedResponse = JSON.parse(responseText);
-      } else {
-        parsedResponse = response;
-      }
-
-      // Log the parsed response to see its structure
-      console.log('GET response:', JSON.stringify(parsedResponse, null, 2));
-
-      // Create the new quiz object
-      const newQuiz = {
-      mapValue: {
-        fields: {
-          topic: { stringValue: this.questionsForm.topic },
-          level: { stringValue: this.questionsForm.level },
-          quizTime: { timestampValue: new Date().toISOString() },
-          questions: {
-            arrayValue: {
-              values: this.questionsForm.questions.map((q) => ({
-                mapValue: {
-                  fields: {
-                    id: { stringValue: q.id },
-                    question: { stringValue: q.question },
-                    options: {
-                      arrayValue: {
-                        values: q.options.map((opt) => ({ stringValue: opt })),
-                      },
-                    },
-                    correctAnswer: { stringValue: q.correctAnswer },
-                  },
-                },
-              })),
-            },
-          },
-          wrongAnswers: {
-            arrayValue: {
-              values: this.wrongAnswer.map((q) => ({
-                mapValue: {
-                  fields: {
-                    id: { stringValue: q.id },
-                    question: { stringValue: q.question },
-                    options: {
-                      arrayValue: {
-                        values: q.options.map((opt) => ({ stringValue: opt })),
-                      },
-                    },
-                    correctAnswer: { stringValue: q.correctAnswer },
-                  },
-                },
-              })),
-            },
-          },
+    this.getData
+      .getRequest(fireStoreRestApi.concat(`${this.authServive.Uid}`), {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authServive.idtoken}`,
         },
-      },
-    };
-
-      // Get existing quizzes array or create empty array if none exists
-      let existingQuizzes = [];
-
-      // Check if response has the expected structure
-      if (parsedResponse &&
-          parsedResponse.fields &&
-          parsedResponse.fields.quizzes &&
-          parsedResponse.fields.quizzes.arrayValue &&
-          parsedResponse.fields.quizzes.arrayValue.values) {
-        existingQuizzes = parsedResponse.fields.quizzes.arrayValue.values;
-      } else {
-        console.log('No existing quizzes found or unexpected response structure:', parsedResponse);
-      }
-
-    // Add the new quiz to the existing array
-    existingQuizzes.push(newQuiz);
-
-    // Create the updated document structure
-    const firestoreFormatted = {
-      fields: {
-        quizzes: {
-          arrayValue: {
-            values: existingQuizzes,
-          },
-        },
-      },
-    };
-
-    // Send the updated data
-    this.sendData
-      .patchRequest(
-        fireStoreRestApi.concat(`${this.authServive.Uid}`),
-        firestoreFormatted,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.authServive.idtoken}`,
-          },
-        }
-      )
+      })
       .subscribe({
         next: (response) => {
-          console.log('Quiz added successfully:', response);
-        },
-        error: (error) => {
-          console.error('Error saving quiz:', error);
-          this.showAlert();
-          this.router.navigate(['login']);
-        },
-        complete: () => {
-          alert('Quiz saved successfully');
-          this.router.navigateByUrl('/');
-          this.quizState.clearQuiz();
-        },
-      });
-    } catch (error) {
-      console.error('Error processing response:', error);
-      this.showAlert();
-      this.router.navigate(['login']);
-    }
-  },
-  error: (error) => {
-    console.error('Error fetching existing data:', error);
-    // If document doesn't exist, create it with the new quiz
-    const firestoreFormatted = {
-      fields: {
-        quizzes: {
-          arrayValue: {
-            values: [{
+          try {
+            // Parse the ArrayBuffer response to JSON
+            let parsedResponse;
+            if (response instanceof ArrayBuffer) {
+              const textDecoder = new TextDecoder();
+              const responseText = textDecoder.decode(response);
+              parsedResponse = JSON.parse(responseText);
+            } else {
+              parsedResponse = response;
+            }
+
+            // Log the parsed response to see its structure
+            console.log(
+              'GET response:',
+              JSON.stringify(parsedResponse, null, 2)
+            );
+
+            // Create the new quiz object
+            const newQuiz = {
               mapValue: {
                 fields: {
                   topic: { stringValue: this.questionsForm.topic },
@@ -219,7 +110,9 @@ this.getData.getRequest(fireStoreRestApi.concat(`${this.authServive.Uid}`), {
                             question: { stringValue: q.question },
                             options: {
                               arrayValue: {
-                                values: q.options.map((opt) => ({ stringValue: opt })),
+                                values: q.options.map((opt) => ({
+                                  stringValue: opt,
+                                })),
                               },
                             },
                             correctAnswer: { stringValue: q.correctAnswer },
@@ -237,7 +130,9 @@ this.getData.getRequest(fireStoreRestApi.concat(`${this.authServive.Uid}`), {
                             question: { stringValue: q.question },
                             options: {
                               arrayValue: {
-                                values: q.options.map((opt) => ({ stringValue: opt })),
+                                values: q.options.map((opt) => ({
+                                  stringValue: opt,
+                                })),
                               },
                             },
                             correctAnswer: { stringValue: q.correctAnswer },
@@ -248,39 +143,169 @@ this.getData.getRequest(fireStoreRestApi.concat(`${this.authServive.Uid}`), {
                   },
                 },
               },
-            }],
-          },
-        },
-      },
-    };
+            };
 
-    this.sendData
-      .patchRequest(
-        fireStoreRestApi.concat(`${this.authServive.Uid}`),
-        firestoreFormatted,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.authServive.idtoken}`,
-          },
-        }
-      )
-      .subscribe({
-        next: (response) => {
-          console.log('New document created with quiz:', response);
+            // Get existing quizzes array or create empty array if none exists
+            let existingQuizzes = [];
+
+            // Check if response has the expected structure
+            if (
+              parsedResponse &&
+              parsedResponse.fields &&
+              parsedResponse.fields.quizzes &&
+              parsedResponse.fields.quizzes.arrayValue &&
+              parsedResponse.fields.quizzes.arrayValue.values
+            ) {
+              existingQuizzes = parsedResponse.fields.quizzes.arrayValue.values;
+            } else {
+              console.log(
+                'No existing quizzes found or unexpected response structure:',
+                parsedResponse
+              );
+            }
+
+            // Add the new quiz to the existing array
+            existingQuizzes.push(newQuiz);
+
+            // Create the updated document structure
+            const firestoreFormatted = {
+              fields: {
+                quizzes: {
+                  arrayValue: {
+                    values: existingQuizzes,
+                  },
+                },
+              },
+            };
+
+            // Send the updated data
+            this.sendData
+              .patchRequest(
+                fireStoreRestApi.concat(`${this.authServive.Uid}`),
+                firestoreFormatted,
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${this.authServive.idtoken}`,
+                  },
+                }
+              )
+              .subscribe({
+                next: (response) => {
+                  console.log('Quiz added successfully:', response);
+                },
+                error: (error) => {
+                  console.error('Error saving quiz:', error);
+                  this.showAlert();
+                  this.router.navigate(['login']);
+                },
+                complete: () => {
+                  alert('Quiz saved successfully');
+                  this.router.navigateByUrl('/');
+                  this.quizState.clearQuiz();
+                },
+              });
+          } catch (error) {
+            console.error('Error processing response:', error);
+            this.showAlert();
+            this.router.navigate(['login']);
+          }
         },
         error: (error) => {
-          console.error('Error creating document:', error);
-          this.showAlert();
-          this.router.navigate(['login']);
-        },
-        complete: () => {
-          alert('Quiz saved successfully');
-          this.router.navigateByUrl('/');
-          this.quizState.clearQuiz();
+          console.error('Error fetching existing data:', error);
+          const firestoreFormatted = {
+            fields: {
+              quizzes: {
+                arrayValue: {
+                  values: [
+                    {
+                      mapValue: {
+                        fields: {
+                          topic: { stringValue: this.questionsForm.topic },
+                          level: { stringValue: this.questionsForm.level },
+                          quizTime: {
+                            timestampValue: new Date().toISOString(),
+                          },
+                          questions: {
+                            arrayValue: {
+                              values: this.questionsForm.questions.map((q) => ({
+                                mapValue: {
+                                  fields: {
+                                    id: { stringValue: q.id },
+                                    question: { stringValue: q.question },
+                                    options: {
+                                      arrayValue: {
+                                        values: q.options.map((opt) => ({
+                                          stringValue: opt,
+                                        })),
+                                      },
+                                    },
+                                    correctAnswer: {
+                                      stringValue: q.correctAnswer,
+                                    },
+                                  },
+                                },
+                              })),
+                            },
+                          },
+                          wrongAnswers: {
+                            arrayValue: {
+                              values: this.wrongAnswer.map((q) => ({
+                                mapValue: {
+                                  fields: {
+                                    id: { stringValue: q.id },
+                                    question: { stringValue: q.question },
+                                    options: {
+                                      arrayValue: {
+                                        values: q.options.map((opt) => ({
+                                          stringValue: opt,
+                                        })),
+                                      },
+                                    },
+                                    correctAnswer: {
+                                      stringValue: q.correctAnswer,
+                                    },
+                                  },
+                                },
+                              })),
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          };
+
+          this.sendData
+            .patchRequest(
+              fireStoreRestApi.concat(`${this.authServive.Uid}`),
+              firestoreFormatted,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${this.authServive.idtoken}`,
+                },
+              }
+            )
+            .subscribe({
+              next: (response) => {
+                console.log('New document created with quiz:', response);
+              },
+              error: (error) => {
+                console.error('Error creating document:', error);
+                this.showAlert();
+                this.router.navigate(['login']);
+              },
+              complete: () => {
+                alert('Quiz saved successfully');
+                this.router.navigateByUrl('/');
+                this.quizState.clearQuiz();
+              },
+            });
         },
       });
-  },
-});
-}
+  }
 }

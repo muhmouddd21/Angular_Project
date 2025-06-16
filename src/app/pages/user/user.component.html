@@ -1,31 +1,37 @@
 <div class="dashboard-container">
-    <div class="header">
-      <h1>My Quiz Dashboard</h1>
-      <div class="user-info">
-        <div>
-          <p>{{ email }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="all-grades">
-      <h2>All Quiz Grades</h2>
-      <div class="grades-table">
-        <div class="table-header">
-          <span>Quiz Topic</span>
-          <span>Level</span>
-          <span>Score</span>
-          <span>Date</span>
-        </div>
-        <div
-          *ngFor="let grade of quizGrades"
-          class="table-row"
-          >
-          <span>{{ grade.topic }}</span>
-          <span>{{ grade.level }}</span>
-          <span>{{ grade.numberOfQuestions - grade.numberOfWrongAnswers }}</span>
-          <span>{{ grade.quizTime }}</span>
-        </div>
+  <div class="header">
+    <h1>My Quiz Dashboard</h1>
+    <div class="user-info">
+      <div>
+        <p>{{ email }}</p>
       </div>
     </div>
   </div>
+
+  <div class="all-grades">
+    <h2>All Quiz Grades</h2>
+    <div class="grades-table">
+      <div class="table-header">
+        <span>Quiz Topic</span>
+        <span>Level</span>
+        <span>Score</span>
+        <span>Date</span>
+        <span>Actions</span>
+      </div>
+      <div *ngFor="let grade of quizGrades; let i = index" class="table-row">
+        <span>{{ grade.topic }}</span>
+        <span>{{ grade.level }}</span>
+        <span
+          >{{ grade.numberOfQuestions - grade.numberOfWrongAnswers }} /{{
+            grade.numberOfQuestions
+          }}
+        </span>
+        <span>{{ grade.quizTime }}</span>
+        <span class="actions">
+          <button class="requiz-btn" (click)="requiz(grade)">Requiz</button>
+          <button class="delete-btn" (click)="deleteQuiz(i)">Delete</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
