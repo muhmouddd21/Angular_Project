@@ -137,6 +137,9 @@ export class UserComponent implements OnInit {
   toggleSortOrder(): void {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
   }
+  isPerfectScore(grade: any): boolean {
+  return ((grade.numberOfQuestions - grade.numberOfWrongAnswers) / grade.numberOfQuestions) === 1;
+}
 
   requiz(grade: any): void {
     this.quizState.setQuiz({

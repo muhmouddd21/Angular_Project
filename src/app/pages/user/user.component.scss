@@ -124,14 +124,14 @@
 
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   flex-wrap: wrap;
 }
 
 .requiz-btn,
 .retry-wrong-btn,
 .delete-btn {
-  padding: 6px 12px;
+  padding: 6px 10px;
   border: none;
   border-radius: 4px;
   font-size: 0.9rem;
