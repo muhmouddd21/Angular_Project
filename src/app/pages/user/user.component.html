@@ -2,36 +2,76 @@
   <div class="header">
     <h1>My Quiz Dashboard</h1>
     <div class="user-info">
-      <div>
-        <p>{{ email }}</p>
-      </div>
+      <p>{{ email }}</p>
     </div>
+  </div>
+
+  <div class="controls">
+    <input
+      type="text"
+      placeholder="Search by topic..."
+      [(ngModel)]="searchText"
+    />
+
+    <select [(ngModel)]="filterLevel">
+      <option value="">All Levels</option>
+      <option *ngFor="let level of uniqueLevels" [value]="level">
+        {{ level }}
+      </option>
+    </select>
+
+    <select [(ngModel)]="sortKey">
+      <option value="topic">Sort by Topic</option>
+      <option value="level">Sort by Level</option>
+      <option value="grade">Sort by Grade</option>
+    </select>
+
+    <button (click)="toggleSortOrder()">
+      {{ sortOrder === "asc" ? "▲ Asc" : "▼ Desc" }}
+    </button>
   </div>
 
   <div class="all-grades">
     <h2>All Quiz Grades</h2>
-    <div class="grades-table">
-      <div class="table-header">
-        <span>Quiz Topic</span>
-        <span>Level</span>
-        <span>Score</span>
-        <span>Date</span>
-        <span>Actions</span>
-      </div>
-      <div *ngFor="let grade of quizGrades; let i = index" class="table-row">
-        <span>{{ grade.topic }}</span>
-        <span>{{ grade.level }}</span>
-        <span
-          >{{ grade.numberOfQuestions - grade.numberOfWrongAnswers }} /{{
-            grade.numberOfQuestions
-          }}
-        </span>
-        <span>{{ grade.quizTime }}</span>
-        <span class="actions">
-          <button class="requiz-btn" (click)="requiz(grade)">Requiz</button>
-          <button class="delete-btn" (click)="deleteQuiz(i)">Delete</button>
-        </span>
-      </div>
+    <div class="grades-table-wrapper">
+      <table class="grades-table">
+        <thead>
+          <tr>
+            <th>Quiz Topic</th>
+            <th>Level</th>
+            <th>Score</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let grade of filteredAndSortedGrades(); let i = index">
+            <td>{{ grade.topic }}</td>
+            <td>{{ grade.level }}</td>
+            <td>
+              {{ grade.numberOfQuestions - grade.numberOfWrongAnswers }} /
+              {{ grade.numberOfQuestions }}
+            </td>
+            <td>{{ grade.quizTime }}</td>
+            <td>
+              <div class="actions">
+                <button class="requiz-btn" (click)="requiz(grade)">
+                  Requiz
+                </button>
+                <button
+                  class="retry-wrong-btn"
+                  (click)="retryWrongAnswers(grade)"
+                >
+                  Requiz Wrong
+                </button>
+                <button class="delete-btn" (click)="deleteQuiz(i)">
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
