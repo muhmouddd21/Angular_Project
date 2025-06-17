@@ -54,16 +54,19 @@
             </td>
             <td>{{ grade.quizTime }}</td>
             <td>
-              <div class="actions">
+              <div class="actions ">
                 <button class="requiz-btn" (click)="requiz(grade)">
                   Requiz
                 </button>
+                @if(((grade.numberOfQuestions - grade.numberOfWrongAnswers)  /
+               grade.numberOfQuestions) !== 1 ){
                 <button
                   class="retry-wrong-btn"
                   (click)="retryWrongAnswers(grade)"
                 >
-                  Requiz Wrong
+                  Requiz Mistakes
                 </button>
+               }
                 <button class="delete-btn" (click)="deleteQuiz(i)">
                   Delete
                 </button>
