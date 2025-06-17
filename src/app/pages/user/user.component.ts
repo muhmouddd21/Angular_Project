@@ -5,26 +5,23 @@ import { GetDataService } from '../../services/get-data.service';
 import { QuizStateService } from '../../services/quiz-state.service';
 import { AuthService } from '../../services/auth.service';
 import { fireStoreRestApi } from '../../firebaseUrl';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
 export class UserComponent implements OnInit {
-  quizGrades: {
-    topic: string;
-    level: string;
-    numberOfQuestions: number;
-    numberOfWrongAnswers: number;
-    quizTime: string;
-    questions: any[];
-    originalData: any;
-  }[] = [];
-
+  quizGrades: any[] = [];
   email: string = '';
+
+  searchText: string = '';
+  filterLevel: string = '';
+  sortKey: string = 'topic';
+  sortOrder: 'asc' | 'desc' = 'asc';
 
   constructor(
     private getData: GetDataService,
@@ -38,9 +35,13 @@ export class UserComponent implements OnInit {
     this.loadUserQuizData();
   }
 
+  get uniqueLevels(): string[] {
+    return [...new Set(this.quizGrades.map((g) => g.level))];
+  }
+
   loadUserQuizData(): void {
     this.getData
-      .getRequest(fireStoreRestApi.concat(`${this.authService.Uid}`), {
+      .getRequest(fireStoreRestApi + this.authService.Uid, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.idtoken}`,
@@ -82,7 +83,15 @@ export class UserComponent implements OnInit {
                 ),
                 correctAnswer: q.mapValue.fields.correctAnswer.stringValue,
               })),
-              originalData: v, // Save original to help with deletion
+              wrongAnswers: wrongAnswers.map((q: any) => ({
+                id: q.mapValue.fields.id.stringValue,
+                question: q.mapValue.fields.question.stringValue,
+                options: q.mapValue.fields.options.arrayValue.values.map(
+                  (opt: any) => opt.stringValue
+                ),
+                correctAnswer: q.mapValue.fields.correctAnswer.stringValue,
+              })),
+              originalData: v,
             };
           });
         },
@@ -92,14 +101,63 @@ export class UserComponent implements OnInit {
       });
   }
 
+  filteredAndSortedGrades(): any[] {
+    let list = this.quizGrades;
+
+    if (this.searchText) {
+      list = list.filter((g) =>
+        g.topic.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    }
+
+    // Filter
+    if (this.filterLevel) {
+      list = list.filter((g) => g.level === this.filterLevel);
+    }
+
+    // Sort
+    list = [...list].sort((a, b) => {
+      let aVal, bVal;
+
+      if (this.sortKey === 'grade') {
+        aVal = a.numberOfQuestions - a.numberOfWrongAnswers;
+        bVal = b.numberOfQuestions - b.numberOfWrongAnswers;
+      } else {
+        aVal = a[this.sortKey].toLowerCase?.() ?? '';
+        bVal = b[this.sortKey].toLowerCase?.() ?? '';
+      }
+
+      const comparison = aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+      return this.sortOrder === 'asc' ? comparison : -comparison;
+    });
+
+    return list;
+  }
+
+  toggleSortOrder(): void {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+  }
+
   requiz(grade: any): void {
-    const quizForm = {
+    this.quizState.setQuiz({
       topic: grade.topic,
       level: grade.level,
       questions: grade.questions,
-    };
+    });
+    this.router.navigateByUrl('/questions');
+  }
 
-    this.quizState.setQuiz(quizForm);
+  retryWrongAnswers(grade: any): void {
+    if (grade.wrongAnswers.length === 0) {
+      alert('No wrong answers to retry.');
+      return;
+    }
+
+    this.quizState.setQuiz({
+      topic: grade.topic,
+      level: grade.level,
+      questions: grade.wrongAnswers,
+    });
     this.router.navigateByUrl('/questions');
   }
 
@@ -107,8 +165,7 @@ export class UserComponent implements OnInit {
     if (!confirm('Are you sure you want to delete this quiz?')) return;
 
     this.quizGrades.splice(index, 1);
-
-    const newQuizArray = this.quizGrades.map((grade) => grade.originalData);
+    const newQuizArray = this.quizGrades.map((g) => g.originalData);
 
     const body = {
       fields: {
@@ -121,120 +178,15 @@ export class UserComponent implements OnInit {
     };
 
     this.getData
-      .patchRequest(fireStoreRestApi.concat(`${this.authService.Uid}`), body, {
+      .patchRequest(fireStoreRestApi + this.authService.Uid, body, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.idtoken}`,
         },
       })
       .subscribe({
-        next: () => {
-          console.log('Quiz deleted successfully.');
-        },
-        error: (err) => {
-          console.error('Failed to delete quiz:', err);
-        },
+        next: () => console.log('Quiz deleted successfully.'),
+        error: (err) => console.error('Failed to delete quiz:', err),
       });
   }
 }
-
-// quizGrades: QuizGrade[] = [
-//   {
-//     id: 1,
-//     quizName: 'Introduction to Programming',
-//     subject: 'Computer Science',
-//     score: 85,
-//     maxScore: 100,
-//     percentage: 85,
-//     date: new Date('2024-01-15'),
-//     status: 'good'
-//   },
-//   {
-//     id: 2,
-//     quizName: 'Basic Mathematics',
-//     subject: 'Mathematics',
-//     score: 92,
-//     maxScore: 100,
-//     percentage: 92,
-//     date: new Date('2024-01-20'),
-//     status: 'excellent'
-//   },
-//   {
-//     id: 3,
-//     quizName: 'World History Quiz',
-//     subject: 'History',
-//     score: 78,
-//     maxScore: 100,
-//     percentage: 78,
-//     date: new Date('2024-01-25'),
-//     status: 'average'
-//   },
-//   {
-//     id: 4,
-//     quizName: 'English Grammar',
-//     subject: 'English',
-//     score: 88,
-//     maxScore: 100,
-//     percentage: 88,
-//     date: new Date('2024-02-01'),
-//     status: 'good'
-//   },
-//   {
-//     id: 5,
-//     quizName: 'Physics Fundamentals',
-//     subject: 'Physics',
-//     score: 95,
-//     maxScore: 100,
-//     percentage: 95,
-//     date: new Date('2024-02-05'),
-//     status: 'excellent'
-//   },
-//   {
-//     id: 6,
-//     quizName: 'Chemistry Basics',
-//     subject: 'Chemistry',
-//     score: 72,
-//     maxScore: 100,
-//     percentage: 72,
-//     date: new Date('2024-02-10'),
-//     status: 'average'
-//   },
-//   {
-//     id: 7,
-//     quizName: 'Biology Test',
-//     subject: 'Biology',
-//     score: 65,
-//     maxScore: 100,
-//     percentage: 65,
-//     date: new Date('2024-02-15'),
-//     status: 'poor'
-//   },
-//   {
-//     id: 8,
-//     quizName: 'Advanced Programming',
-//     subject: 'Computer Science',
-//     score: 90,
-//     maxScore: 100,
-//     percentage: 90,
-//     date: new Date('2024-02-20'),
-//     status: 'excellent'
-//   }
-// ];
-
-// averageScore: number = 0;
-// highestScore: number = 0;
-// passedQuizzes: number = 0;
-
-// private calculateStats() {
-//   const totalScore = this.quizGrades.reduce((sum, grade) => sum + grade.percentage, 0);
-//   this.averageScore = Math.round(totalScore / this.quizGrades.length);
-//   this.highestScore = Math.max(...this.quizGrades.map(grade => grade.percentage));
-//   this.passedQuizzes = this.quizGrades.filter(grade => grade.percentage >= 70).length;
-// }
-
-// private getGradeStatus(percentage: number): 'excellent' | 'good' | 'average' | 'poor' {
-//   if (percentage >= 90) return 'excellent';
-//   if (percentage >= 80) return 'good';
-//   if (percentage >= 70) return 'average';
-//   return 'poor';
-// }

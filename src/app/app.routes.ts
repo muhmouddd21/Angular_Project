@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './pages/main-layout/main-layout.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { authGuardGuard } from './guards/auth-guard.guard';
-
+import { quizExitGuard } from './guards/quiz-exit.guard.ts.guard';
 export const routes: Routes = [
   {
     path: '',
@@ -20,11 +20,13 @@ export const routes: Routes = [
       {
         path: 'questions',
         loadComponent: () =>
-          import('./pages/questions/questions.component').then((c) => {
-            return c.QuestionsComponent;
-          }),
+          import('./pages/questions/questions.component').then(
+            (c) => c.QuestionsComponent
+          ),
         canActivate: [authGuardGuard],
+        canDeactivate: [quizExitGuard],
       },
+
       {
         path: 'login',
         loadComponent: () =>
